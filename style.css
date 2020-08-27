@@ -1,0 +1,223 @@
+:root {
+  --primary-color: #cd201f;
+  --secondary-color: #df2029;
+}
+html {
+  font-size: 62.55%;
+}
+*,
+*:before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: #f5f5f5;
+  color: #424242;
+  font-family: "Merienda One", cursive;
+  position: relative;
+  overflow-x: hidden;
+}
+.pop-up-msg {
+  display: none;
+  /* position: sticky; */
+  position: absolute;
+  top: 1rem;
+  right: 0;
+  height: 10rem;
+  padding: 1rem;
+  border-radius: 0.2rem;
+  background: #fff;
+  display: inline-block;
+  font-size: 1.6rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 1s ease, opacity 0.5s ease;
+  transform: translateX(36rem);
+}
+/* .hide{
+  transform: translateX(36rem);
+  opacity: 0;
+  visibility: hidden;
+}
+.show{
+  transform: translateX(0rem);
+  opacity: 1;
+  visibility: visible;
+} */
+
+/* Utility  */
+
+.mb-2 {
+  margin-bottom: 2rem;
+}
+.m-1 {
+  margin: 1rem;
+}
+h3 {
+  display: inline-block;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 2rem;
+}
+.btn {
+  background-color: var(--primary-color);
+  color: #fcfcfc;
+  font-size: 1.6rem;
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+}
+.todo {
+  background-color: #b3e5fc;
+}
+.doing {
+  background: #ffccbc;
+}
+.done {
+  background: #c8e6c9;
+}
+.tasks {
+  padding-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 1rem 0;
+}
+.tasks > li {
+  margin: 0.5rem 0;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-size: 1.6rem;
+  background: #fafafa;
+  box-shadow: 0 0 2rem -0.2rem #d3d3d3;
+}
+
+svg {
+  stroke: rgba(36, 25, 25, 0.2);
+  cursor: pointer;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(80px);
+  transition: all 0.6s ease;
+}
+svg:hover {
+  stroke: var(--primary-color);
+}
+.icons .delete-task{
+  display: inline-block;
+  width: 4rem;
+  height: 4rem;
+  overflow: hidden;
+}
+li:hover .icons svg {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Navbar */
+.navbar {
+  background: var(--primary-color);
+  padding: 1rem 4rem;
+}
+.navbar a {
+  text-decoration: none;
+  color: var(--primary-color);
+  background: #fcfcfc;
+  padding: 0.5rem 0.8rem;
+  display: inline-block;
+  font-size: 2.4rem;
+  text-transform: capitalize;
+  border-radius: 0.5rem;
+}
+/* Consists of all the 4 main class */
+.container {
+  margin: 2rem;
+  display: grid;
+  grid-template-columns: 30rem minmax(55rem, 70rem) 30rem;
+  grid-template-rows: 30rem auto;
+  grid-template-areas: "todo form-inputs done" "todo doing done";
+  justify-content: center;
+  gap: 2rem;
+}
+/* Forms Inner-Designs : Grid-1st-Chid*/
+.form-inputs {
+  grid-area: form-inputs;
+  padding: 1.5rem 3rem;
+  font-size: 2.5rem;
+  border: 2px solid var(--primary-color);
+  border-radius: 0.5rem;
+}
+.form-inputs form > input[type="text"],
+.form-inputs .filter input {
+  border: none;
+  border-bottom: 2px solid var(--primary-color);
+  outline: none;
+  font-size: 2rem;
+  font-family: "Architects Daughter", cursive;
+  background: transparent;
+}
+.form-inputs form > input {
+  display: block;
+  width: 100%;
+}
+.form-inputs .categories {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2rem 0;
+}
+.category {
+  margin-right: 1rem;
+  border-radius: 0.4rem;
+  padding: 0 0.6rem;
+}
+.categories .category label {
+  font-size: 1.6rem;
+}
+
+.form-inputs .filter {
+  margin-top: 1rem;
+}
+.form-inputs .filter input {
+  border: none;
+  border-bottom: 2px solid var(--primary-color);
+  min-width: 21.4rem;
+}
+.form-inputs .filter .btn {
+  display: inline-block;
+  width: 15rem;
+}
+
+/* todo-list */
+.todo-lists {
+  grid-area: todo;
+}
+/* done-lists */
+.done-lists {
+  grid-area: done;
+}
+/* Doing-lists */
+.doing-lists {
+  grid-area: doing;
+}
+.doing-lists .tasks {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.doing-lists .tasks li {
+  margin-right: 1rem;
+  flex: 3 1 20rem;
+}
+.tasks li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
