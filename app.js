@@ -2,17 +2,11 @@
 const popUpMsg = document.querySelector(".pop-up-msg") /* pop-up-msg */,
   addTask = document.getElementById("addTask") /* Task-Input */,
   form = document.querySelector(".new-task-form") /* Form */,
-  todoTask = document.querySelector('input[value="to-do"]') /* to-do radio-btn */,
-  doingTask = document.querySelector('input[value="doing"]') /* doing radio-btn */,
-  doneTask = document.querySelector('input[value="done"]') /* done radio-btn */,
   todoList = document.querySelector(".todo-lists .tasks"),
   doingList = document.querySelector(".doing-lists .tasks"),
   doneList = document.querySelector(".done-lists .tasks"),
   taskList = document.querySelector(".tasks"), /* selecting UL*/
-  categorySelected = document.querySelectorAll('input[type = "radio"]');
-
-
-
+  categorySelected = document.querySelectorAll('input[type = "radio"]');/* Radio-btns */
 
 
 /*
@@ -22,21 +16,15 @@ const popUpMsg = document.querySelector(".pop-up-msg") /* pop-up-msg */,
     TODO -3: Create a function which checks and sends which radio btn is selected
 
 */
-/*
-  ! Current Goals
-  todo1 : Create A function which return the selected radio button
 
-*/
+// const popUpMessages = {
+//   /* Add the instrucion messages in the inroMsg */
+//   introMsg: "WELCOME!! To The Task manager ",
+//   deleteSuccess: "The item Was Successfully Deleted :",
+//   deleteFailed: "Unable to delte the Item currently",
+// };
 
 
-
-
-const popUpMessages = {
-  /* Add the instrucion messages in the inroMsg */
-  introMsg: "WELCOME!! To The Task manager ",
-  deleteSuccess: "The item Was Successfully Deleted :",
-  deleteFailed: "Unable to delte the Item currently",
-};
 
 document.addEventListener("DOMContentLoaded", () => {
   var getAllTasks;
@@ -48,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   } else {
     getAllTasks = JSON.parse(localStorage.getItem("tasks"));
+
 
     getAllTasks.todo.forEach((input) => createNewTask(input,"todo"));
     getAllTasks.doing.forEach((input) => createNewTask(input,"doing"));
@@ -63,11 +52,11 @@ form.addEventListener("submit", (e) => {
 
     /* pass the pop-up msg */
   } else {
-    /* Get the Selected value Category */
+    /* Get the Selected Radio Button*/
     var type = getCategory();
 
     /* Add the Task to LIst */
-    createNewTask(addTask.value);
+    createNewTask(addTask.value, type.id);
 
     /* Add the task to local storage */
     addTaskToLocalStorage(addTask.value,type.id);
@@ -76,6 +65,7 @@ form.addEventListener("submit", (e) => {
     addTask.value = "";
   }
 });
+
 function getCategory() {
   let selected;
   for (const element of categorySelected) {
@@ -88,17 +78,17 @@ function getCategory() {
 }
 
 
-function createNewTask(inputValue) {
+function createNewTask(inputValue, taskType) {
   var html =
-    '<li> <span class="content">' +
+    '<li class="'+taskType+'"> <span class="content">' +
     inputValue +
     '</span> <div class="icons"> <span > <svg class="delete-task" fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="30px" height="30px" stroke="#808080"> <path pointer-events="none" fill="none" stroke-miterlimit="10" stroke-width="2" d="M23 27H11c-1.1 0-2-.9-2-2V8h16v17C25 26.1 24.1 27 23 27zM27 8L7 8M14 8V6c0-.6.4-1 1-1h4c.6 0 1 .4 1 1v2M17 23L17 12M21 23L21 12M13 23L13 12" /> </svg> </span> </div> </li>';
 
-  if (todoTask.checked || type === "todo") {
+  if ( taskType === "todo") {
     todoList.insertAdjacentHTML("beforeend", html);
-  } else if (doingTask.checked || type === "doing") {
+  } else if ( taskType === "doing") {
     doingList.insertAdjacentHTML("beforeend", html);
-  } else if (doneTask.checked || type === "doing") {
+  } else if ( taskType === "done") {
     doneList.insertAdjacentHTML("beforeend", html);
   }
 }
@@ -121,48 +111,21 @@ function addTaskToLocalStorage(inputValue, taskType) {
   console.log(getAllTasks);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* Delete Tasks */
 taskList.addEventListener("click", (e) => {
   console.log(e.target.classList);
   if (e.target.classList.contains("delete-task")) {
-    console.log(true);
     // showPopUp();
-    e.target.parentElement.parentElement.parentElement.remove();
-  } else if (e.target.classList.contains("dropdown-menu")) {
 
-  } else {
-    console.log("false");
+    // removeTaskFromLocalstorage();
+    e.target.parentElement.parentElement.parentElement.remove();
+
   }
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+function removeTaskfromLocalStorage(){
+  
+}
 
 
 
