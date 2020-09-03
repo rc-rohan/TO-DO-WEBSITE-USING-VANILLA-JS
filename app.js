@@ -5,43 +5,42 @@ const popUpMsg = document.querySelector(".pop-up-msg") /* pop-up-msg */,
   todoList = document.querySelector(".todo-lists .tasks"),
   doingList = document.querySelector(".doing-lists .tasks"),
   doneList = document.querySelector(".done-lists .tasks"),
-  taskList = document.querySelector(".tasks"), /* selecting UL*/
+  taskList = document.querySelectorAll(".tasks"), /* selecting UL*/
   categorySelected = document.querySelectorAll('input[type = "radio"]');/* Radio-btns */
 
 
 /*
-    ! obtain the DRY principle
+    ! ACHEVE DRY Principle
     todo-1 add the window loading evnt which will reload all the tasks
     todo-2 : Create the drag and drop  API to Move the data from one place to other
     TODO -3: Create a function which checks and sends which radio btn is selected
+    todo4 Create a global function of the getALLTasks varible which get updated automatically every time and can be acessed everywhere
 
 */
 
-// const popUpMessages = {
-//   /* Add the instrucion messages in the inroMsg */
-//   introMsg: "WELCOME!! To The Task manager ",
-//   deleteSuccess: "The item Was Successfully Deleted :",
-//   deleteFailed: "Unable to delte the Item currently",
-// };
+
+
+// * Get all Task from the local storage
+
+var getAllTasks,id=0;
+if (localStorage.getItem("tasks") === null) {
+  getAllTasks = {
+    todo: [],
+    doing: [],
+    done: [],
+  };
+
+} else {
+  getAllTasks = JSON.parse(localStorage.getItem("tasks"));
+}
 
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  var getAllTasks;
-  if (localStorage.getItem("tasks") === null) {
-    getAllTasks = {
-      todo: [],
-      doing: [],
-      done: [],
-    };
-  } else {
-    getAllTasks = JSON.parse(localStorage.getItem("tasks"));
+    getAllTasks.todo.forEach((input,index) => createNewTask(input,"todo",index));
+    getAllTasks.doing.forEach((input,index) => createNewTask(input,"doing",index));
+    getAllTasks.done.forEach((input,index) => createNewTask(input,"done",index));
 
-
-    getAllTasks.todo.forEach((input) => createNewTask(input,"todo"));
-    getAllTasks.doing.forEach((input) => createNewTask(input,"doing"));
-    getAllTasks.done.forEach((input) => createNewTask(input,"done"));
-  }
 });
 
 form.addEventListener("submit", (e) => {
@@ -78,65 +77,68 @@ function getCategory() {
 }
 
 
-function createNewTask(inputValue, taskType) {
-  var html =
-    '<li class="'+taskType+'"> <span class="content">' +
-    inputValue +
-    '</span> <div class="icons"> <span > <svg class="delete-task" fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="30px" height="30px" stroke="#808080"> <path pointer-events="none" fill="none" stroke-miterlimit="10" stroke-width="2" d="M23 27H11c-1.1 0-2-.9-2-2V8h16v17C25 26.1 24.1 27 23 27zM27 8L7 8M14 8V6c0-.6.4-1 1-1h4c.6 0 1 .4 1 1v2M17 23L17 12M21 23L21 12M13 23L13 12" /> </svg> </span> </div> </li>';
+function createNewTask(inputValue, taskType,index) {
 
-  if ( taskType === "todo") {
+  id = getAllTasks[taskType].length ;
+  var elementID = index ?? id;/* Using Nullish Operator  */
+  /* Nullish operator makes the work easier instead of using if-else */
+  var html = `<li id="${taskType}-${elementID+1}" draggable="true"  ondragstart="onDragStart(event);"  ondragstart="onDragStart(event);> <span class="content">${inputValue}</span> <div class="icons"> <span > <svg class="delete-task" fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="30px" height="30px" stroke="#808080"> <path pointer-events="none" fill="none" stroke-miterlimit="10" stroke-width="2" d="M23 27H11c-1.1 0-2-.9-2-2V8h16v17C25 26.1 24.1 27 23 27zM27 8L7 8M14 8V6c0-.6.4-1 1-1h4c.6 0 1 .4 1 1v2M17 23L17 12M21 23L21 12M13 23L13 12" /> </svg> </span> </div> </li>`;
+
+  if (taskType === "todo") {
     todoList.insertAdjacentHTML("beforeend", html);
-  } else if ( taskType === "doing") {
+  } else if (taskType === "doing") {
     doingList.insertAdjacentHTML("beforeend", html);
-  } else if ( taskType === "done") {
+  } else if (taskType === "done") {
     doneList.insertAdjacentHTML("beforeend", html);
   }
 }
 
-function addTaskToLocalStorage(inputValue, taskType) {
-  var getAllTasks;
-  if (localStorage.getItem("tasks") === null) {
-    getAllTasks = {
-      todo: [],
-      doing: [],
-      done: [],
-    };
-  } else {
-    getAllTasks = JSON.parse(localStorage.getItem("tasks"));
-  }
 
-    getAllTasks[taskType].push(inputValue);
+/*
+  todo1 : check on which elememnt the drag has started through the classlist.contanins() property
+  todo2 : after that add the dragover attributest to thosse dinamically
+
+*/
+
+
+
+
+function onDrop(event) {
+  const id = event.dataTransfer.getData("text");
+  const  element = document.querySelector()
+}
+
+
+function addTaskToLocalStorage(inputValue, taskType) {
+
+
+  getAllTasks[taskType].push(inputValue);
 
   localStorage.setItem("tasks", JSON.stringify(getAllTasks));
   console.log(getAllTasks);
 }
 
 /* Delete Tasks */
-taskList.addEventListener("click", (e) => {
-  console.log(e.target.classList);
+taskList.forEach(li => li.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete-task")) {
     // showPopUp();
-
-    // removeTaskFromLocalstorage();
-    e.target.parentElement.parentElement.parentElement.remove();
-
+    const element =  e.target.parentElement.parentElement.parentElement;
+    removeFromLocalStorage(element);
+   element.remove();
   }
-});
+}));
 
-function removeTaskfromLocalStorage(){
-  
+// Removing deleted Item Form LocalStorage
+function removeFromLocalStorage(element){
+ let type,text;
+  type = element.id.split("-");
+  text = element.innerText;
+  // Removing From Array
+  getAllTasks[type[0]].splice(getAllTasks[type[0]].indexOf(text),1);
+
+  //Updating  local storage
+  localStorage.setItem("tasks", JSON.stringify(getAllTasks));
+
 }
 
 
-
-// function showPopUp() {
-//   var styleSelector = popUpMsg.style;
-//   styleSelector.transform = "translateX(0rem)";
-//   styleSelector.opacity = "1";
-//   styleSelector.visibility = "visible";
-//   setTimeout(() => {
-//     styleSelector.transform = "translateX(36rem)";
-//     styleSelector.opacity = "0";
-//     styleSelector.visibility = "hidden";
-//   }, 2000);
-// }
